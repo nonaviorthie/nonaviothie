@@ -82,6 +82,11 @@
     background:linear-gradient(150deg, var(--pink), var(--violet-deep));
     display:flex; align-items:center; justify-content:center; font-size:26px; box-shadow:var(--shadow);
   }
+  .hero .mascot img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .hero .mascot.profile-fallback::after{ content:"💜"; font-size:26px; }
+
   .hero h1{ font-size:24px; margin:0 0 4px; font-weight:600;}
   .hero p{ font-size:13.5px; color:var(--text-dim); margin:0; line-height:1.5;}
 
@@ -210,7 +215,10 @@
   <!-- HOME VIEW -->
   <div id="view-home">
     <div class="hero">
-      <div class="mascot">💜</div>
+      <div class="mascot" id="profileImageWrap">
+        <img id="profileImage" src="./logo.svg" alt="Foto profil" decoding="async"
+             onerror="this.hidden=true; this.parentElement.classList.add('profile-fallback');">
+      </div>
       <h1>Halo, Calon Coder!</h1>
       <p>Belajar coding pelan-pelan, satu tag setiap saat. Pilih bahasa pemrograman untuk mulai petualanganmu.</p>
     </div>
@@ -439,7 +447,7 @@ const LESSONS = [
   {level:82, tag:"<source>", explain:"Tag <source> digunakan di dalam <picture>, <audio>, atau <video> untuk menyediakan beberapa pilihan sumber media.", symbols:[["<source>","tag penyedia sumber media alternatif"]], code:"<picture>\n  <source srcset=\"foto.webp\" type=\"image/webp\">\n  <img src=\"foto.jpg\" alt=\"Foto\">\n</picture>", output:"Jika browser mendukung format WebP, foto.webp akan dipakai. Jika tidak, foto.jpg akan ditampilkan sebagai cadangan."},
   {level:83, tag:"<figure>", explain:"Tag <figure> digunakan untuk mengelompokkan konten mandiri seperti gambar, ilustrasi, atau diagram beserta keterangannya.", symbols:[["<figure>","pembungkus konten mandiri seperti gambar"]], code:"<figure>\n  <img src=\"pemandangan.jpg\" alt=\"Pemandangan gunung\">\n</figure>", output:"Gambar pemandangan akan dikelompokkan sebagai satu kesatuan konten mandiri."},
   {level:84, tag:"<figcaption>", explain:"Tag <figcaption> digunakan untuk memberi keterangan pada elemen <figure>, biasanya diletakkan di dalam tag <figure>.", symbols:[["<figcaption>","keterangan untuk elemen figure"]], code:"<figure>\n  <img src=\"gunung.jpg\" alt=\"Gunung\">\n  <figcaption>Pemandangan gunung saat matahari terbit</figcaption>\n</figure>", output:"Di bawah gambar gunung akan muncul teks keterangan \"Pemandangan gunung saat matahari terbit\"."},
-  {level:85, tag:"Format Gambar", explain:"HTML mendukung berbagai format gambar seperti JPG (foto), PNG (gambar transparan), SVG (gambar vektor), GIF (animasi sederhana), dan WebP (format modern yang ringan).", symbols:[["JPG, PNG","format gambar umum"],["SVG, GIF, WebP","format gambar lainnya"]], code:'<img src="logo.svg" alt="Logo Vektor">', output:"Gambar logo.svg akan tampil tajam di ukuran berapapun karena berbasis vektor."},
+  {level:85, tag:"Format Gambar", explain:"HTML mendukung berbagai format gambar seperti JPG (foto), PNG (gambar transparan), SVG (gambar vektor), GIF (animasi sederhana), dan WebP (format modern yang ringan).", symbols:[["JPG, PNG","format gambar umum"],["SVG, GIF, WebP","format gambar lainnya"]], code:'<img src="./logo.svg" alt="Logo Vektor">', output:"Gambar logo.svg akan tampil tajam di ukuran berapapun karena berbasis vektor."},
   {level:86, tag:"Gambar Lokal", explain:"Gambar lokal adalah gambar yang disimpan langsung di dalam folder proyek dan dipanggil menggunakan path file, bukan dari internet.", symbols:[["gambar lokal","gambar yang tersimpan di komputer/proyek sendiri"]], code:'<img src="images/foto-saya.jpg" alt="Foto Saya">', output:"Gambar akan diambil dari folder images di dalam proyek, bukan dari internet."},
   {level:87, tag:"Gambar Online", explain:"Gambar online adalah gambar yang diambil langsung dari alamat URL di internet, bukan dari file yang tersimpan di komputer.", symbols:[["URL","alamat gambar dari internet"]], code:'<img src="https://contoh.com/gambar.jpg" alt="Gambar Online">', output:"Browser akan mengambil gambar langsung dari internet melalui alamat URL yang diberikan."},
   {level:88, tag:"Path Relatif Gambar", explain:"Path relatif menunjukkan lokasi file berdasarkan posisi file HTML saat ini, tanpa menyebutkan alamat lengkap.", symbols:[["images/foto.jpg","contoh path relatif"]], code:'<img src="images/foto.jpg" alt="Foto">', output:"Browser akan mencari file foto.jpg di dalam folder images yang berada di posisi yang sama dengan file HTML."},
