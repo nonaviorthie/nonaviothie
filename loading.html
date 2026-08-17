@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nona Viorthie — Memuat...</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#170D20;
+    --surface2:#2C1A40;
+    --pink:#FF6FB0;
+    --magenta:#E0409E;
+    --violet:#9B5DE5;
+    --violet-deep:#6C33B8;
+    --text:#FBF3FA;
+    --text-faint:#9280AA;
+    --shadow:0 12px 32px -8px rgba(224,64,158,.28);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 12% -6%, rgba(155,93,229,.35), transparent 42%),
+      radial-gradient(circle at 88% 8%, rgba(224,64,158,.25), transparent 40%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Nunito Sans', sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  #wrap{ text-align:center; padding:20px; }
+
+  .ring{
+    width:88px; height:88px; margin:0 auto 26px; border-radius:50%;
+    border:5px solid rgba(255,255,255,.08);
+    border-top-color:var(--pink);
+    border-right-color:var(--violet);
+    animation:spin 1s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .brand{ font-family:'Fredoka',sans-serif; font-size:22px; font-weight:600; letter-spacing:.3px; }
+  .brand span{ color:var(--pink); }
+
+  .loading-text{
+    font-size:12.5px; color:var(--text-faint); letter-spacing:1.5px; text-transform:uppercase;
+    margin-top:10px;
+  }
+  .loading-text .dots::after{
+    content:'.'; animation:dots 1.2s steps(4,end) infinite;
+  }
+  @keyframes dots{
+    0%{ content:'.'; }
+    33%{ content:'..'; }
+    66%{ content:'...'; }
+    100%{ content:''; }
+  }
+
+  .progress-track{
+    width:200px; height:8px; border-radius:20px; background:var(--surface2);
+    overflow:hidden; margin:22px auto 0; border:1px solid rgba(255,255,255,.05);
+  }
+  .progress-fill{
+    height:100%; border-radius:20px; width:0%;
+    background:linear-gradient(90deg, var(--pink), var(--violet));
+    animation:fill 3s ease forwards;
+  }
+  @keyframes fill{ to{ width:100%; } }
+</style>
+</head>
+<body>
+
+<div id="wrap">
+  <div class="ring"></div>
+  <div class="brand">NONA <span>VIORTHIE</span></div>
+  <div class="loading-text">Memuat<span class="dots"></span></div>
+  <div class="progress-track"><div class="progress-fill"></div></div>
+</div>
+
+<script>
+  setTimeout(function(){
+    window.location.href = "app.html";
+  }, 3000);
+</script>
+
+</body>
+</html>
