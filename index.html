@@ -161,16 +161,6 @@
   .preview-label{ font-size:11px; color:var(--text-faint); margin-bottom:6px;}
   .output-note{ font-size:13px; color:var(--text-dim); margin-top:8px; line-height:1.55;}
 
-  /* ---------- HTML Code Lab editor ---------- */
-  .code-editor{
-    width:100%; min-height:160px; max-height:320px; background:#120A1A; color:#F1D9EA;
-    border:1.5px solid rgba(255,255,255,.1); border-radius:14px; padding:14px 16px;
-    font-family:'JetBrains Mono',monospace; font-size:16px; line-height:1.6;
-    resize:vertical; -webkit-appearance:none; outline:none; display:block;
-    white-space:pre; overflow:auto; -webkit-overflow-scrolling:touch;
-  }
-  .code-editor:focus{ border-color:var(--pink); box-shadow:0 0 0 3px rgba(255,111,176,.15); }
-
   /* ---------- Quiz ---------- */
   .quiz-progress-dots{ display:flex; gap:6px; margin-bottom:16px;}
   .dot{ flex:1; height:6px; border-radius:6px; background:var(--surface2);}
@@ -314,43 +304,39 @@
     </div>
   </div>
 
-  <!-- CHECKPOINT VIEW: HTML CODE LAB (sebelum Level 11) -->
+  <!-- CHECKPOINT VIEW (sebelum Level 11) -->
   <div id="view-checkpoint" class="hidden">
     <div class="card complete-wrap" id="checkpointIntro">
       <div class="complete-emoji">🏁</div>
-      <h2>HTML CODE LAB</h2>
-      <p>Uji kemampuanmu sebelum lanjut ke Level 11. Kamu akan mengerjakan 10 challenge praktik memakai materi Level 1–10 yang sudah kamu pelajari.</p>
-      <button class="btn btn-primary" onclick="startCheckpoint()">MULAI CODE LAB →</button>
+      <h2>CHECKPOINT!</h2>
+      <p>Sebelum lanjut ke Level 11, yuk jalankan ulang 10 materi dari Level 1–10 supaya makin nempel di ingatan.</p>
+      <button class="btn btn-primary" onclick="startCheckpoint()">MULAI CHECKPOINT →</button>
     </div>
 
     <div id="checkpointRunner" class="hidden">
       <div class="lesson-meta">
-        <span class="pill">HTML CODE LAB</span>
-        <span id="cpPosText">Challenge 1/10</span>
+        <span class="pill">CHECKPOINT</span>
+        <span id="cpPosText">Materi 1/10</span>
       </div>
       <div class="progress-track" style="margin-bottom:16px;"><div class="progress-fill" id="cpFill" style="width:10%"></div></div>
 
       <div class="card">
-        <div class="section-label" id="cpChallengeLabel">Challenge 1</div>
-        <div class="explain-text" id="cpInstruction" style="margin-bottom:14px;"></div>
+        <div class="tag-title" id="cpTag">&lt;h1&gt;</div>
 
-        <textarea id="cpEditor" class="code-editor" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off"></textarea>
+        <div class="section-label">Arti & Kegunaan</div>
+        <div class="explain-text" id="cpExplain"></div>
 
-        <div class="btn-row" style="margin-top:12px;">
-          <button class="btn btn-ghost" id="cpHintBtn" onclick="cpToggleHint()">💡 Lihat Hint</button>
-          <button class="btn btn-primary" id="cpRunBtn" onclick="cpRunCode()">▶ RUN CODE</button>
-        </div>
+        <div class="section-label">Contoh Kode</div>
+        <div class="code-block" id="cpCode"></div>
 
-        <div class="output-note hidden" id="cpHintBox"></div>
-
-        <div id="cpFeedback"></div>
-
-        <div class="section-label">Preview</div>
+        <div class="section-label">Preview Hasil</div>
         <div class="preview-box"><iframe id="cpPreview" sandbox=""></iframe></div>
+        <div class="output-note" id="cpOutput"></div>
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-primary hidden" id="cpNextBtn" onclick="cpNext()">Lanjut →</button>
+        <button class="btn btn-secondary" id="cpPrevBtn" onclick="cpPrev()">← Kembali</button>
+        <button class="btn btn-primary" id="cpNextBtn" onclick="cpNext()">Lanjut →</button>
       </div>
     </div>
   </div>
@@ -2445,7 +2431,7 @@ function renderLevels(){
         <div class="lv-top">
           <div class="lv-num">🏁</div>
           <div>
-            <div class="lv-title">🏁 HTML Code Lab</div>
+            <div class="lv-title">Checkpoint — Ulas Materi 1-10</div>
             <div class="lv-desc">Wajib diselesaikan dulu sebelum Level 11 terbuka</div>
           </div>
         </div>
@@ -2672,177 +2658,49 @@ function goToLevelsFromComplete(){
   navTo("levels");
 }
 
-/* ================= CHECKPOINT: HTML CODE LAB (sebelum Level 11) =================
-   Latihan praktik ketik-kode berdasarkan materi Level 1-10 yang SUDAH dipelajari:
-   h1 (L1), p (L2), br (L3), hr (L4), komentar (L5), DOCTYPE (L6), html (L7),
-   lang (L8), head/title (L9), body (L10). Tidak ada materi baru diperkenalkan. */
-
-function cpText(el){ return el ? el.textContent.replace(/\s+/g," ").trim() : ""; }
-function cpParse(code){ return new DOMParser().parseFromString(code, "text/html"); }
-function cpHasDoctype(code){ return /<!DOCTYPE\s+html\s*>/i.test(code); }
-function cpHasTag(code, tag){ return new RegExp("<"+tag+"[\\s>/]", "i").test(code); }
-
-const CHECKPOINT_CHALLENGES = [
-  {
-    title: "Challenge 1 — Judul Utama",
-    instruction: "Buat judul utama bertuliskan <b>Halo Dunia!</b> menggunakan tag heading yang paling besar.",
-    starterCode: "<h1>____</h1>",
-    hint: "Tag untuk judul utama adalah tag heading level paling tinggi (Level 1).",
-    validate(code){
-      const h1 = cpParse(code).querySelector("h1");
-      return !!h1 && cpText(h1) === "Halo Dunia!";
-    }
-  },
-  {
-    title: "Challenge 2 — Paragraf",
-    instruction: "Buat paragraf berisi: <b>Saya sedang belajar HTML.</b>",
-    starterCode: "<p>____</p>",
-    hint: "Tag ini paling sering dipakai untuk menulis kalimat biasa (Level 2).",
-    validate(code){
-      const p = cpParse(code).querySelector("p");
-      return !!p && cpText(p) === "Saya sedang belajar HTML.";
-    }
-  },
-  {
-    title: "Challenge 3 — Baris Baru",
-    instruction: "Pisahkan dua baris teks berikut memakai tag baris baru yang tepat, tanpa mengubah teksnya.",
-    starterCode: "Baris satu____Baris dua",
-    hint: "Tag ini berfungsi seperti menekan Enter dan tidak punya tag penutup (Level 3).",
-    validate(code){
-      return /Baris satu\s*<br\s*\/?>\s*Baris dua/i.test(code);
-    }
-  },
-  {
-    title: "Challenge 4 — Garis Pemisah",
-    instruction: "Pisahkan dua paragraf berikut menggunakan tag garis pemisah yang tepat.",
-    starterCode: "<p>Bagian atas</p>\n____\n<p>Bagian bawah</p>",
-    hint: "Tag ini membuat garis horizontal dan juga tidak punya tag penutup (Level 4).",
-    validate(code){
-      const ps = cpParse(code).querySelectorAll("p");
-      return cpHasTag(code,"hr") && ps.length===2 && cpText(ps[0])==="Bagian atas" && cpText(ps[1])==="Bagian bawah";
-    }
-  },
-  {
-    title: "Challenge 5 — Komentar",
-    instruction: "Tambahkan komentar HTML (isi bebas, tidak akan muncul di halaman) sebelum paragraf berikut.",
-    starterCode: "____\n<p>Ini yang terlihat</p>",
-    hint: "Komentar diawali dengan &lt;!-- dan diakhiri --&gt; (Level 5).",
-    validate(code){
-      const p = cpParse(code).querySelector("p");
-      return /<!--[\s\S]*?-->/.test(code) && !!p && cpText(p)==="Ini yang terlihat";
-    }
-  },
-  {
-    title: "Challenge 6 — Struktur Dasar",
-    instruction: "Lengkapi baris pertama dokumen HTML ini dengan deklarasi tipe dokumen yang tepat.",
-    starterCode: "____\n<html lang=\"id\">\n  <head>\n    <title>Halaman Saya</title>\n  </head>\n  <body>\n    <p>Halo!</p>\n  </body>\n</html>",
-    hint: "Baris ini memberi tahu browser bahwa dokumen ditulis dengan HTML5 (Level 6).",
-    validate(code){
-      const title = cpParse(code).querySelector("title");
-      return cpHasDoctype(code) && !!title && cpText(title)==="Halaman Saya";
-    }
-  },
-  {
-    title: "Challenge 7 — Tag Pembungkus",
-    instruction: "Bungkus seluruh isi berikut dengan tag pembuka dan penutup pembungkus utama halaman.",
-    starterCode: "____\n  <body>\n    <p>Halo!</p>\n  </body>\n____",
-    hint: "Tag ini membungkus SELURUH isi halaman, dari head sampai body (Level 7).",
-    validate(code){
-      const p = cpParse(code).querySelector("body p");
-      return /<html[\s>]/i.test(code) && /<\/html>/i.test(code) && !!p && cpText(p)==="Halo!";
-    }
-  },
-  {
-    title: "Challenge 8 — Atribut Bahasa",
-    instruction: "Tambahkan atribut yang menandai bahasa halaman ini sebagai Bahasa Indonesia pada tag &lt;html&gt;.",
-    starterCode: "<html____>\n  <body>\n    <p>Halo</p>\n  </body>\n</html>",
-    hint: "Atributnya bernama lang, dengan nilai \"id\" untuk Bahasa Indonesia (Level 8).",
-    validate(code){
-      return cpParse(code).documentElement.getAttribute("lang") === "id";
-    }
-  },
-  {
-    title: "Challenge 9 — Judul Tab",
-    instruction: "Lengkapi bagian &lt;head&gt; berikut supaya judul tab browser menjadi \"Nona Viorthie\".",
-    starterCode: "<head>\n  ____\n</head>",
-    hint: "Gunakan tag yang menentukan judul tab, diletakkan di dalam head (Level 9).",
-    validate(code){
-      const title = cpParse(code).querySelector("title");
-      return !!title && cpText(title)==="Nona Viorthie";
-    }
-  },
-  {
-    title: "Challenge 10 — Gabungkan Semua",
-    instruction: "Buat halaman HTML sederhana dari nol: sertakan DOCTYPE, tag &lt;html lang=\"id\"&gt;, &lt;head&gt; dengan &lt;title&gt; bebas, dan &lt;body&gt; berisi &lt;h1&gt; bertuliskan <b>Portofolio Saya</b> serta &lt;p&gt; bertuliskan <b>Selamat datang di halaman saya.</b>",
-    starterCode: "<!-- Tulis kode HTML lengkapmu di sini -->\n",
-    hint: "Gabungkan semua yang sudah dipelajari: DOCTYPE, html+lang, head+title, lalu body berisi h1 dan p.",
-    validate(code){
-      const doc = cpParse(code);
-      const title = doc.querySelector("title");
-      const h1 = doc.querySelector("h1");
-      const p = doc.querySelector("p");
-      return cpHasDoctype(code)
-        && doc.documentElement.getAttribute("lang") === "id"
-        && !!title && cpText(title).length > 0
-        && !!h1 && cpText(h1) === "Portofolio Saya"
-        && !!p && cpText(p).toLowerCase().includes("selamat datang di halaman saya");
-    }
-  }
-];
-
-let cpCorrect = [];   // status per challenge di sesi berjalan (true = sudah pernah benar)
+/* ================= CHECKPOINT VIEW (sebelum Level 11) =================
+   Mengulang 10 materi dari Level 1-10 sebagai jalankan-ulang singkat
+   sebelum pemain diizinkan lanjut ke Level 11. */
+function checkpointLessons(){
+  return LESSONS.filter(l => l.level >= 1 && l.level <= 10);
+}
 
 function startCheckpoint(){
   checkpointIndex = 0;
-  cpCorrect = new Array(CHECKPOINT_CHALLENGES.length).fill(false);
   document.getElementById("checkpointIntro").classList.add("hidden");
   document.getElementById("checkpointRunner").classList.remove("hidden");
   renderCheckpoint();
 }
 
 function renderCheckpoint(){
-  const total = CHECKPOINT_CHALLENGES.length;
-  const ch = CHECKPOINT_CHALLENGES[checkpointIndex];
-  document.getElementById("cpPosText").textContent = `Challenge ${checkpointIndex+1}/${total}`;
+  const lessons = checkpointLessons();
+  const lesson = lessons[checkpointIndex];
+  const total = lessons.length;
+  document.getElementById("cpPosText").textContent = `Materi ${checkpointIndex+1}/${total}`;
   document.getElementById("cpFill").style.width = (((checkpointIndex+1)/total)*100) + "%";
-  document.getElementById("cpChallengeLabel").textContent = ch.title;
-  document.getElementById("cpInstruction").innerHTML = ch.instruction;
-  document.getElementById("cpEditor").value = ch.starterCode;
-  document.getElementById("cpFeedback").innerHTML = "";
-  document.getElementById("cpHintBox").classList.add("hidden");
-  document.getElementById("cpHintBox").textContent = ch.hint;
-  document.getElementById("cpPreview").srcdoc = "";
-  document.getElementById("cpNextBtn").classList.add("hidden");
-}
+  document.getElementById("cpTag").textContent = lesson.tag;
+  document.getElementById("cpExplain").innerHTML = lesson.explain;
+  document.getElementById("cpCode").textContent = lesson.code;
+  document.getElementById("cpOutput").textContent = lesson.output;
 
-function cpToggleHint(){
-  document.getElementById("cpHintBox").classList.toggle("hidden");
-}
-
-function cpRunCode(){
-  const code = document.getElementById("cpEditor").value;
-  const ch = CHECKPOINT_CHALLENGES[checkpointIndex];
   const iframe = document.getElementById("cpPreview");
   const previewStyle = "body{font-family:sans-serif;padding:10px;margin:0;color:#222;font-size:14px;}";
-  iframe.srcdoc = `<style>${previewStyle}</style>${code}`;
+  iframe.srcdoc = `<style>${previewStyle}</style>${lesson.code}`;
 
-  let ok = false;
-  try{ ok = !!ch.validate(code); }catch(e){ ok = false; }
-
-  const feedback = document.getElementById("cpFeedback");
-  if(ok){
-    feedback.innerHTML = `<div class="feedback-banner ok">✅ Benar! Kode berhasil dijalankan.</div>`;
-    cpCorrect[checkpointIndex] = true;
-    document.getElementById("cpNextBtn").classList.remove("hidden");
-  } else {
-    feedback.innerHTML = `<div class="feedback-banner bad">❌ Belum benar. Coba cek lagi tag atau struktur HTML-mu.</div>`;
-    document.getElementById("cpNextBtn").classList.add("hidden");
-  }
+  document.getElementById("cpPrevBtn").disabled = checkpointIndex === 0;
+  const nextBtn = document.getElementById("cpNextBtn");
+  const isLast = checkpointIndex === total - 1;
+  nextBtn.textContent = isLast ? "Selesai Checkpoint → Lanjut ke Level 11" : "Lanjut →";
 }
 
+function cpPrev(){
+  if(checkpointIndex > 0){
+    checkpointIndex--;
+    renderCheckpoint();
+  }
+}
 function cpNext(){
-  if(!cpCorrect[checkpointIndex]) return; // jaga-jaga: tidak bisa lanjut sebelum challenge ini benar
-  const total = CHECKPOINT_CHALLENGES.length;
+  const total = checkpointLessons().length;
   if(checkpointIndex < total - 1){
     checkpointIndex++;
     renderCheckpoint();
@@ -2850,13 +2708,12 @@ function cpNext(){
     finishCheckpoint();
   }
 }
-
 function finishCheckpoint(){
   state.checkpointDone = true;
   state.unlockedLevel = Math.max(state.unlockedLevel, 11);
   saveState();
   document.getElementById("levelCompleteText").textContent =
-    "🎉 HTML CODE LAB SELESAI! Kamu berhasil menyelesaikan 10 challenge HTML. Level 11 sekarang terbuka! 💜";
+    "Mantap! Kamu sudah mengulas 10 materi Level 1–10. Level 11 sekarang terbuka!";
   showView("levelComplete");
 }
 
