@@ -3,18 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nona Viorthie — Memuat...</title>
+<title>Nona Viorthie — Learn Coding</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#170D20;
+    --surface:#221331;
     --surface2:#2C1A40;
     --pink:#FF6FB0;
     --magenta:#E0409E;
     --violet:#9B5DE5;
     --violet-deep:#6C33B8;
     --text:#FBF3FA;
+    --text-dim:#C6AEDA;
     --text-faint:#9280AA;
     --shadow:0 12px 32px -8px rgba(224,64,158,.28);
   }
@@ -29,64 +31,69 @@
     font-family:'Nunito Sans', sans-serif;
     min-height:100vh;
     -webkit-font-smoothing:antialiased;
-    overflow:hidden;
-    display:flex; align-items:center; justify-content:center;
+    overflow-x:hidden;
+  }
+  h1,.display{ font-family:'Fredoka', sans-serif; }
+
+  .bracket-deco{
+    position:fixed; font-family:'JetBrains Mono',monospace; font-weight:700;
+    color:rgba(255,111,176,.07); pointer-events:none; z-index:0; user-select:none;
+  }
+  .bracket-deco.b1{ top:6%; left:4%; font-size:120px; transform:rotate(-12deg);}
+  .bracket-deco.b2{ bottom:4%; right:3%; font-size:160px; transform:rotate(9deg); color:rgba(155,93,229,.08);}
+
+  #app{
+    position:relative; z-index:1; max-width:480px; margin:0 auto; min-height:100vh;
+    padding:20px 24px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+  }
+  @media(min-width:600px){ #app{max-width:560px;} }
+
+  .mascot{
+    width:110px; height:110px; border-radius:32px; margin-bottom:26px;
+    background:linear-gradient(150deg, var(--pink), var(--violet-deep));
+    display:flex; align-items:center; justify-content:center; font-size:44px;
+    font-family:'JetBrains Mono',monospace; font-weight:700; color:#1a0d26;
+    box-shadow:var(--shadow);
+    animation:floaty 3.2s ease-in-out infinite;
+  }
+  @keyframes floaty{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-10px); }
   }
 
-  #wrap{ text-align:center; padding:20px; }
+  .brand-name{ font-size:34px; font-weight:600; letter-spacing:.3px; line-height:1.1; margin:0;}
+  .brand-name span{ color:var(--pink);}
+  .brand-sub{ font-size:13px; color:var(--text-faint); letter-spacing:2.5px; text-transform:uppercase; margin-top:8px;}
 
-  .ring{
-    width:88px; height:88px; margin:0 auto 26px; border-radius:50%;
-    border:5px solid rgba(255,255,255,.08);
-    border-top-color:var(--pink);
-    border-right-color:var(--violet);
-    animation:spin 1s linear infinite;
-  }
-  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .tagline{ font-size:14.5px; color:var(--text-dim); line-height:1.6; margin:22px 0 34px; max-width:340px;}
 
-  .brand{ font-family:'Fredoka',sans-serif; font-size:22px; font-weight:600; letter-spacing:.3px; }
-  .brand span{ color:var(--pink); }
+  .btn-start{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    padding:16px 34px; border-radius:18px; border:none; cursor:pointer;
+    font-family:'Nunito Sans',sans-serif; font-weight:800; font-size:15px; letter-spacing:.2px;
+    background:linear-gradient(120deg,var(--pink),var(--magenta)); color:#22102D;
+    box-shadow:var(--shadow); transition:transform .12s, opacity .12s;
+  }
+  .btn-start:active{ transform:scale(.97); }
 
-  .loading-text{
-    font-size:12.5px; color:var(--text-faint); letter-spacing:1.5px; text-transform:uppercase;
-    margin-top:10px;
-  }
-  .loading-text .dots::after{
-    content:'.'; animation:dots 1.2s steps(4,end) infinite;
-  }
-  @keyframes dots{
-    0%{ content:'.'; }
-    33%{ content:'..'; }
-    66%{ content:'...'; }
-    100%{ content:''; }
-  }
-
-  .progress-track{
-    width:200px; height:8px; border-radius:20px; background:var(--surface2);
-    overflow:hidden; margin:22px auto 0; border:1px solid rgba(255,255,255,.05);
-  }
-  .progress-fill{
-    height:100%; border-radius:20px; width:0%;
-    background:linear-gradient(90deg, var(--pink), var(--violet));
-    animation:fill 3s ease forwards;
-  }
-  @keyframes fill{ to{ width:100%; } }
+  .footer-note{ position:absolute; bottom:22px; left:0; right:0; text-align:center; font-size:11px; color:var(--text-faint);}
 </style>
 </head>
 <body>
 
-<div id="wrap">
-  <div class="ring"></div>
-  <div class="brand">NONA <span>VIORTHIE</span></div>
-  <div class="loading-text">Memuat<span class="dots"></span></div>
-  <div class="progress-track"><div class="progress-fill"></div></div>
+<div class="bracket-deco b1">&lt;/&gt;</div>
+<div class="bracket-deco b2">&lt;/&gt;</div>
+
+<div id="app">
+  <div class="mascot">&lt;/&gt;</div>
+  <h1 class="brand-name">NONA <span>VIORTHIE</span></h1>
+  <div class="brand-sub">Learn Coding</div>
+  <p class="tagline">Belajar coding pelan-pelan, satu tag setiap saat. Yuk mulai petualangan codingmu bareng Nona Viorthie!</p>
+  <button class="btn-start" onclick="window.location.href='loading.html'">Mulai ✨</button>
 </div>
 
-<script>
-  setTimeout(function(){
-    window.location.href = "app.html";
-  }, 3000);
-</script>
+<div class="footer-note">Dibuat dengan 💜 untuk calon coder</div>
 
 </body>
 </html>
